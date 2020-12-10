@@ -17,6 +17,7 @@ package com.broadcom.lsp.cobol.core.model.variables;
 
 import com.broadcom.lsp.cobol.core.model.Locality;
 import lombok.NonNull;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +32,9 @@ public abstract class StructuredVariable extends AbstractVariable {
   private List<Variable> children = new ArrayList<>();
   int levelNumber;
 
-  StructuredVariable(int levelNumber, String name, String qualifier, Locality definition) {
-    super(name, qualifier, definition);
+  StructuredVariable(
+      int levelNumber, String name, String qualifier, Locality definition, Variable parent) {
+    super(name, qualifier, definition, parent);
     this.levelNumber = levelNumber;
   }
 

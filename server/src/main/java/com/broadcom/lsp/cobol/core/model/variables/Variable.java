@@ -63,4 +63,11 @@ public interface Variable extends Renameable {
    * @param usage - a {@link Locality} of this variable usage
    */
   void addUsage(@NonNull Locality usage);
+
+  /**
+   * Get the parent of this variable in the hierarchy
+   *
+   * @return parent {@link Variable}
+   */
+  Variable getParent();
 }

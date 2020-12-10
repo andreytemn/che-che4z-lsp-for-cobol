@@ -18,7 +18,6 @@ package com.broadcom.lsp.cobol.core.model.variables;
 import com.broadcom.lsp.cobol.core.model.Locality;
 import com.broadcom.lsp.cobol.core.preprocessor.delegates.util.VariableUtils;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.Value;
 
 import java.util.ArrayList;
@@ -33,15 +32,23 @@ import java.util.List;
 @Value
 @EqualsAndHashCode(callSuper = true)
 public class ElementItem extends AbstractVariable {
-  private String picClause;
-  private String value;
-  @Getter private List<ConditionalDataName> conditionalDataNames = new ArrayList<>();
+  String picClause;
+  String value;
+  UsageFormat usageFormat;
+  List<ConditionalDataName> conditionalDataNames = new ArrayList<>();
 
   public ElementItem(
-      String name, String qualifier, Locality definition, String picClause, String value) {
-    super(name, qualifier, definition);
+      String name,
+      String qualifier,
+      Locality definition,
+      Variable parent,
+      String picClause,
+      String value,
+      UsageFormat usageFormat) {
+    super(name, qualifier, definition, parent);
     this.picClause = picClause;
     this.value = value;
+    this.usageFormat = usageFormat;
   }
 
   /**
@@ -54,12 +61,14 @@ public class ElementItem extends AbstractVariable {
   }
 
   @Override
-  public Variable rename(String renameItemName) {
+  public Variable rename(RenameItem newParent) {
     return new ElementItem(
         name,
-        VariableUtils.renameQualifier(qualifier, renameItemName),
+        VariableUtils.renameQualifier(qualifier, newParent.name),
         definition,
+        newParent,
         picClause,
-        value);
+        value,
+        usageFormat);
   }
 }

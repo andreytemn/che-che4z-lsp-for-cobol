@@ -21,18 +21,16 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Map;
 
-/** This test checks that CICS variable name is allowed. */
-class TestCICSVariableNameAllowed {
-
+/** This test checks the variable definition without a name doesn't throw an exception. */
+class TestElementEntryWithoutName {
   private static final String TEXT =
-      "        IDENTIFICATION DIVISION.\n"
-          + "        PROGRAM-ID. TEST1.\n"
-          + "        DATA DIVISION.\n"
-          + "        WORKING-STORAGE SECTION.\n"
-          + "        01 {$*CICS} PIC 9.\n" // CICS variable name allowed
-          + "        PROCEDURE DIVISION.\n"
-          + "        {#*CICS}.\n" // CICS paragraphName allowed
-          + "        END PROGRAM TEST1.";
+      "        Identification Division.\n"
+          + "        Program-Id. 'TEST'.\n"
+          + "       Data Division.\n"
+          + "       Working-Storage Section.\n"
+          + "       1 {$*PARENT}.\n"
+          + "       2 pic x(11) value \n"
+          + "            'dfhcommarea'.\n";
 
   @Test
   void test() {

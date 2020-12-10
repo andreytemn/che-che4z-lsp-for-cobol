@@ -19,6 +19,7 @@ import com.broadcom.lsp.cobol.core.model.Locality;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ public abstract class AbstractVariable implements Variable {
   @Getter protected final String qualifier;
   @Getter protected final Locality definition;
   private final List<Locality> usages = new ArrayList<>();
+  private Variable parent;
 
   @Override
   public @NonNull List<Locality> getUsages() {
@@ -39,5 +41,9 @@ public abstract class AbstractVariable implements Variable {
   @Override
   public void addUsage(@NonNull Locality usage) {
     usages.add(usage);
+  }
+
+  public Variable getParent() {
+    return parent;
   }
 }

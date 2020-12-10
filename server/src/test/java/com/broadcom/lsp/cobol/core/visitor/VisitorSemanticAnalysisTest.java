@@ -117,6 +117,7 @@ class VisitorSemanticAnalysisTest {
 
   private QualifiedDataNameFormat1Context mockMethod(CustomToken token) {
     QualifiedDataNameFormat1Context node = mock(QualifiedDataNameFormat1Context.class);
+
     DataNameContext nodeData = mock(DataNameContext.class);
 
     when(node.dataName()).thenReturn(nodeData);

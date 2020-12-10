@@ -18,12 +18,11 @@ package com.broadcom.lsp.cobol.usecases;
 import com.broadcom.lsp.cobol.service.delegates.validations.SourceInfoLevels;
 import com.broadcom.lsp.cobol.usecases.engine.UseCaseEngine;
 import org.eclipse.lsp4j.Diagnostic;
+import org.eclipse.lsp4j.DiagnosticSeverity;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
-
-import static org.eclipse.lsp4j.DiagnosticSeverity.Information;
 
 /**
  * This test checks that parser can find and underline an incorrect variable structure. Here CHILD1
@@ -33,6 +32,7 @@ import static org.eclipse.lsp4j.DiagnosticSeverity.Information;
  * two errors with intersecting positions. Check also that the multiple whitespaces collapsed in the
  * error message.
  */
+// TODO:fix doc
 class TestEntireIncorrectVariableStructureUnderlined {
 
   private static final String TEXT =
@@ -44,8 +44,8 @@ class TestEntireIncorrectVariableStructureUnderlined {
           + "       01  {$*CHILD1} PIC 9.\n"
           + "       PROCEDURE DIVISION.\n"
           + "       {#*MAINLINE}.\n"
-          + "           MOVE 0 TO   {_{$CHILD1}   OF   {$PARENT}|inv_}.\n"
-          + "           MOVE 0 TO   {_{$CHILD2|single}     OF    {$PARENT}|2inv_}.\n"
+          + "           MOVE 0 TO   {CHILD1|inv} OF PARENT.\n"
+          + "           MOVE 0 TO   {CHILD2|single} OF PARENT.\n"
           + "           GOBACK. ";
 
   @Test
@@ -56,12 +56,9 @@ class TestEntireIncorrectVariableStructureUnderlined {
         Map.of(
             "inv",
                 new Diagnostic(
-                    null, "Invalid definition for: CHILD1 OF PARENT", Information, SourceInfoLevels.INFO.getText()),
-            "2inv",
-                new Diagnostic(
-                    null, "Invalid definition for: CHILD2 OF PARENT", Information, SourceInfoLevels.INFO.getText()),
+                    null, "Invalid definition for: CHILD1", DiagnosticSeverity.Error, SourceInfoLevels.ERROR.getText()),
             "single",
                 new Diagnostic(
-                    null, "Invalid definition for: CHILD2", Information, SourceInfoLevels.INFO.getText())));
+                    null, "Invalid definition for: CHILD2", DiagnosticSeverity.Error, SourceInfoLevels.ERROR.getText())));
   }
 }

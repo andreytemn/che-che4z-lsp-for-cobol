@@ -17,6 +17,7 @@ package com.broadcom.lsp.cobol.core.model.variables;
 
 import com.broadcom.lsp.cobol.core.model.Locality;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.Value;
 
 /**
@@ -25,9 +26,10 @@ import lombok.Value;
  * statements.
  */
 @Value
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class SpecialName extends AbstractVariable {
   public SpecialName(String name, String qualifier, Locality definition) {
-    super(name, qualifier, definition);
+    super(name, qualifier, definition, null);
   }
 }

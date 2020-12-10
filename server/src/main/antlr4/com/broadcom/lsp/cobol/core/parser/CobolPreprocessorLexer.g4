@@ -322,18 +322,34 @@ SINGLEQUOTE : '\'';
 SLASHCHAR : '/';
 
 // literals
-NONNUMERICLITERAL : STRINGLITERAL | HEXNUMBER;
+NONNUMERICLITERAL : UNTRMSTRINGLITERAL | STRINGLITERAL | DBCSLITERAL | HEXNUMBER | NULLTERMINATED;
 NUMERICLITERAL : [0-9]+;
 INTEGERLITERAL : (PLUSCHAR | MINUSCHAR)? NUMERICLITERAL;
+
 
 fragment HEXNUMBER :
 	X '"' [0-9A-F]+ '"'
 	| X '\'' [0-9A-F]+ '\''
 ;
 
+fragment NULLTERMINATED :
+	Z '"' (~["\n\r] | '""' | '\'')* '"'
+	| Z '\'' (~['\n\r] | '\'\'' | '"')* '\''
+;
+
 fragment STRINGLITERAL :
 	'"' (~["\n\r] | '""' | '\'')* '"'
 	| '\'' (~['\n\r] | '\'\'' | '"')* '\''
+;
+
+fragment UNTRMSTRINGLITERAL :
+	'"' (~["\n\r] | '""' | '\'')*
+	| '\'' (~['\n\r] | '\'\'' | '"')*
+;
+
+fragment DBCSLITERAL :
+	[GN] '"' (~["\n\r] | '""' | '\'')* '"'
+	| [GN] '\'' (~['\n\r] | '\'\'' | '"')* '\''
 ;
 
 IDENTIFIER : [a-zA-Z0-9#@$]+ ([-_]+ [a-zA-Z0-9#@$]+)*;

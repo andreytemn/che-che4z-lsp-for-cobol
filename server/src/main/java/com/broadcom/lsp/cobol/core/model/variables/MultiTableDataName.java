@@ -17,6 +17,7 @@ package com.broadcom.lsp.cobol.core.model.variables;
 
 import com.broadcom.lsp.cobol.core.model.Locality;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.Value;
 
 import java.util.List;
@@ -26,19 +27,21 @@ import java.util.List;
  * and an optional index
  */
 @Value
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class MultiTableDataName extends StructuredVariable implements TableDeclaration {
-  private int occursTimes;
-  private List<IndexItem> indexes;
+  int occursTimes;
+  List<IndexItem> indexes;
 
   public MultiTableDataName(
       int levelNumber,
       String name,
       String qualifier,
       Locality definition,
+      Variable parent,
       int occursTimes,
       List<IndexItem> indexes) {
-    super(levelNumber, name, qualifier, definition);
+    super(levelNumber, name, qualifier, definition, parent);
     this.occursTimes = occursTimes;
     this.indexes = indexes;
   }

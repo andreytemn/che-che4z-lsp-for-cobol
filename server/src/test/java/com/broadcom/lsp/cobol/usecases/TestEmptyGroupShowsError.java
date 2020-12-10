@@ -15,36 +15,41 @@
 
 package com.broadcom.lsp.cobol.usecases;
 
+import com.broadcom.lsp.cobol.service.delegates.validations.SourceInfoLevels;
 import com.broadcom.lsp.cobol.usecases.engine.UseCaseEngine;
+import org.eclipse.lsp4j.Diagnostic;
+import org.eclipse.lsp4j.DiagnosticSeverity;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
 
-/** This test checks that there are no errors on the "SKIP2" statement. */
-class TestSkipStatement {
+/**
+ * THis test checks that an empty structure produces an error on the parent without PIC. Here:
+ * PARENT has no PIC clause neither nested element items
+ */
+class TestEmptyGroupShowsError {
 
   private static final String TEXT =
       "        IDENTIFICATION DIVISION.\n"
-          + "        PROGRAM-ID. SKIP_TEST.\n"
+          + "        PROGRAM-ID. TEST1.\n"
           + "        DATA DIVISION.\n"
           + "        WORKING-STORAGE SECTION.\n"
-          + "        01 {$*ID0} PIC 9.\n"
-          + "        01 {$*TAPARM1} PIC 9.\n"
+          + "        01 {$*PARENT|nopic}.\n"
           + "        PROCEDURE DIVISION.\n"
-          + "       {#*PROGA}.\n"
-          + "       SKIP1\n"
-          + "           PERFORM WITH TEST BEFORE UNTIL {$ID0} = 0\n"
-          + "             SUBTRACT 1 FROM {$TAPARM1}\n"
-          + "             CALL {%'ID1'}\n"
-          + "           END-PERFORM.\n"
-          + "        SKIP2.\n"
-          + "        {#*PROGB}.\n"
-          + "            EXIT.\n"
-          + "        EJECT";
+          + "        END PROGRAM TEST1.";
 
   @Test
   void test() {
-    UseCaseEngine.runTest(TEXT, List.of(), Map.of(), List.of("ID1"));
+    UseCaseEngine.runTest(
+        TEXT,
+        List.of(),
+        Map.of(
+            "nopic",
+            new Diagnostic(
+                null,
+                "A \"PICTURE\" clause was not found for elementary item PARENT",
+                DiagnosticSeverity.Error,
+                SourceInfoLevels.ERROR.getText())));
   }
 }
